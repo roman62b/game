@@ -1,3 +1,17 @@
+/*
+!make data.txt saving in own usr directory yopta
+
+!remake data.txt to .game_data.txt
+
+!saving .game_data.txt in home directory
+    in win and lin systems if usr used one of this
+
+!cleaning Makefile
+
+!done bin directory
+    add clean:
+*/
+
 // libs
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,6 +34,9 @@ bool is_usr_first;
 bool is_usr_win;
 char enemy_sym;
 char usr_sym;
+/*
+char usr_data_file_path[] = .usr_game_data.txt
+*/
 
 // headers
 bool check_win(char cur_field[]);
@@ -223,7 +240,7 @@ void check_result() {
             ++stats[2];
         }
     } else {
-        printf("\nThe game ended in a draw.\n");
+        printf("\nThe game ended in a draw!\n");
         ++stats[3];
     }
     ++stats[0];
