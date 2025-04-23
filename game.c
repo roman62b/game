@@ -6,9 +6,7 @@
 #include <time.h>
 #include <string.h>
 
-#include "game.h"
-
-// ???
+// utils
 #include "sys_utils.h"
 #include "dbg_utils.h"
 
@@ -23,8 +21,29 @@ bool is_usr_first;
 bool is_usr_win;
 char enemy_sym;
 char usr_sym;
-char data_file[] = ".game_usr_data.txt\0"; // new
-char usr_data_path[64] = "\0";
+char data_file[32] = ".game_usr_data.txt";
+char usr_data_path[128] = "\0";
+
+// headers
+bool check_win(char cur_field[]);
+bool check_drawn(char cur_field[]);
+bool menu(void);
+int inp_usr_step(void);
+int calc_enemy_step(char cur_field[]);
+void draw_field(void);
+void update(void);
+void start_session(void);
+void mk_usr_step(void);
+void mk_enemy_step(void);
+void clear_data(void);
+void check_result(void);
+void game_circle(void);
+void game(void);
+void main_menu(void);
+void menu_liest(void);
+void menu_info(void);
+void save_stats(const char *file_name);
+bool get_stats(const char *file_name);
 
 // funcs
 void draw_field() {
@@ -307,8 +326,6 @@ void main_menu() {
 int main(void) {
     // inizialized usr_data_file in home
     sys_get_data_path(usr_data_path, data_file);
-    printf("%s\n", usr_data_path);
-    dbg_stop();
 
     printf("Tic-Tac-Toe is running...\n");
     sleep(1);
