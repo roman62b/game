@@ -41,7 +41,8 @@ void sys_print_file(const char *path) {
 }
 
 void sys_get_data_path(char *data_path, const char *data_file) {
-	strcat(data_path, "/home/$(whoami)/");
+	//strcat(data_path, "/home/$(whoami)/");
+	strcat(data_path, "/home/roman62/");
 	strcat(data_path, data_file);
 }
 
