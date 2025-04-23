@@ -1,17 +1,3 @@
-/*
-!make data.txt saving in own usr directory yopta
-
-!remake data.txt to .game_data.txt
-
-!saving .game_data.txt in home directory
-    in win and lin systems if usr used one of this
-
-!cleaning Makefile
-
-!done bin directory
-    add clean:
-*/
-
 // libs
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,10 +6,13 @@
 #include <time.h>
 #include <string.h>
 
-// api
-#include "sysapi.h"
+#include "game.h"
 
-// globals
+// ???
+#include "sys_utils.h"
+#include "dbg_utils.h"
+
+// vars
 #define FIELD_SIZE 9
 #define STATS_COUNT 4
 char field[FIELD_SIZE] = "         ";
@@ -34,44 +23,19 @@ bool is_usr_first;
 bool is_usr_win;
 char enemy_sym;
 char usr_sym;
-/*
-char usr_data_file_path[] = .usr_game_data.txt
-*/
-
-// headers
-bool check_win(char cur_field[]);
-bool check_drawn(char cur_field[]);
-bool menu(void);
-int inp_usr_step(void);
-int calc_enemy_step(char cur_field[]);
-void draw_field(void);
-void update(void);
-void start_session(void);
-void mk_usr_step(void);
-void mk_enemy_step(void);
-void clear_data(void);
-void check_result(void);
-void game_circle(void);
-void game(void);
-void main_menu(void);
-void menu_liest(void);
-void menu_info(void);
-void save_stats(const char *file_name);
-bool get_stats(const char *file_name);
+char data_file[] = ".game_usr_data.txt\0"; // new
+char usr_data_path[64] = "\0";
 
 // funcs
 void draw_field() {
     printf("+---+---+---+\n");
-    for (int i = 0; i < FIELD_SIZE; ++i) {
-        printf("| %c", field[i]);
-        printf(" | %c | ", field[++i]);
-        printf("%c |", field[++i]);
-        printf("\n+---+---+---+\n");
+    for (int i = 0; i < FIELD_SIZE; i += 3) {
+        printf("| %c | %c | %c |\n+---+---+---+\n",  field[i],  field[i + 1],  field[i + 2]);
     }
 }
 
 void update() {
-    console_clear();
+    sys_console_clear();
     draw_field();
 }
 
@@ -104,7 +68,7 @@ bool check_drawn(char cur_field[]) {
 
 void start_session() {
     again_select: ;
-    console_clear();
+    sys_console_clear();
     printf("Select the symbol 'X' or '0'.\n");
     char input_sym = getchar();
     if ((input_sym == 'X') || (input_sym == 'x')) {
@@ -130,7 +94,6 @@ int inp_usr_step() {
 void mk_usr_step() {
     again: ;
     int step_val = inp_usr_step() - 1;
-    //printf("%i", step_val);
     if ((step_val < 0) || (step_val > 8)) {
         update();
         goto again;
@@ -186,21 +149,21 @@ void mk_enemy_step() {
 
 bool menu() {
     menu: ;
-    console_clear();
+    sys_console_clear();
     printf("Enter symbol:\n\t's' or '1' to play\n\t'l' or '2' to view statistics\n\t'i' or '3' to view info\n\t'q' or '0' to quit\n");
     char symbol = getchar();
     if ((symbol == 's') || (symbol == 'S') || (symbol == '1')) {
         return false;
     } else if ((symbol == 'l') || (symbol == 'L') || (symbol == '2')) {
-        console_clear();
+        sys_console_clear();
         menu_liest();
         goto menu;
     } else if ((symbol == 'i') || (symbol == 'I') || (symbol == '3')) {
-        console_clear();
+        sys_console_clear();
         menu_info();
         goto menu;
     } else if ((symbol == 'q') || (symbol == 'Q') || (symbol == '0')) {
-        console_clear();
+        sys_console_clear();
         return true;
     } else {
         goto menu;
@@ -208,17 +171,16 @@ bool menu() {
 }
 
 void menu_liest() {
-    if (get_stats("data.txt")) save_stats("data.txt");
+    if (get_stats(usr_data_path)) save_stats(usr_data_path);
     printf("Liest statistics.\n");
-    print_file("data.txt");
+    sys_print_file(usr_data_path);
     printf("\nPress 'Enter' to close.\n");
     getchar();
     getchar();
 }
 
 void menu_info() {
-    printf("Info about this project.\n\nGithub repository: https://github.com/roman62b/game.git\n");
-    printf("\nPress 'Enter' to close.\n");
+    printf("Info about this project.\n\nGithub repository: https://github.com/roman62b/game.git\n\nPress 'Enter' to close.\n");
     getchar();
     getchar();
 }
@@ -328,9 +290,9 @@ void game() {
     clear_data();
     start_session();
     game_circle();
-    if (get_stats("data.txt")) save_stats("data.txt");
+    if (get_stats(usr_data_path)) save_stats(usr_data_path);
     check_result();
-    save_stats("data.txt");
+    save_stats(usr_data_path);
     main_menu();
 }
 
@@ -343,6 +305,11 @@ void main_menu() {
 }
 
 int main(void) {
+    // inizialized usr_data_file in home
+    sys_get_data_path(usr_data_path, data_file);
+    printf("%s\n", usr_data_path);
+    dbg_stop();
+
     printf("Tic-Tac-Toe is running...\n");
     sleep(1);
     main_menu();
