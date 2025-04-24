@@ -21,7 +21,7 @@ bool is_usr_first;
 bool is_usr_win;
 char enemy_sym;
 char usr_sym;
-char data_file[32] = ".game_usr_data.txt";
+char data_file[] = ".game_usr_data.txt\0";
 char usr_data_path[128] = "\0";
 
 // headers
@@ -158,8 +158,7 @@ int calc_enemy_step(char cur_field[]) {
         }
     }
     srand(time(NULL));
-    int r_index = rand() % free_size;
-    return free_cells[r_index];
+    return free_cells[(rand() % free_size)];
 }
 
 void mk_enemy_step() {
@@ -324,7 +323,7 @@ void main_menu() {
 }
 
 int main(void) {
-    // inizialized usr_data_file in home
+    // initialization of usr data file
     sys_get_data_path(usr_data_path, data_file);
 
     printf("Tic-Tac-Toe is running...\n");
