@@ -44,6 +44,7 @@ void sys_print_file(const char *path) {
 #include <unistd.h>
 
 void sys_get_data_path(char *data_path, const char *data_file) {
+	strcat(data_path, "/home/");
 	strcat(data_path, getlogin());
 	strcat(data_path, "/");
 	strcat(data_path, data_file);
