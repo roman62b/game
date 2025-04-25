@@ -323,7 +323,7 @@ void main_menu() {
 }
 
 int main(void) {
-    // initialization of usr data file
+    // initialization path to usr home dir
     sys_get_data_path(usr_data_path, data_file);
 
     printf("Tic-Tac-Toe is running...\n");
