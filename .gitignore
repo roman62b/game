@@ -1,0 +1,4 @@
+# Ignore bin directory files
+bin/
+
+.token
